@@ -52,7 +52,12 @@ const PagesRoutes = [
     layout: "VerticalLayout",
     isProtected: true,
   },
-
+  {
+    path: "/pages/document-permissions",
+    component: lazy(() => import("../../view/pages/document-permission")),
+    layout: "VerticalLayout",
+    isProtected: true,
+  },
   // PAGES
   {
     path: "/pages/authentication/login",

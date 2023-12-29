@@ -290,7 +290,12 @@ const pages = [
     icon: <Profile size={18} />,
     navLink: "/pages/documents",
   },
-
+  {
+    id: "documents",
+    title: <IntlMessages id="sidebar-pages-document-permissions" />,
+    icon: <Profile size={18} />,
+    navLink: "/pages/document-permissions",
+  },
   // {
   //   id: "clients",
   //   title: <IntlMessages id="sidebar-pages-clients" />,
