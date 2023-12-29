@@ -1,20 +1,44 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { useSelector } from "react-redux";
 
 import { Row, Col } from "antd";
 import { WalletMinus, Login, Add, Logout } from "iconsax-react";
-
+import axios from "axios";
 import FeatureCard from "../../main/dashboard/analytics/featureCard";
 // import BalanceCard from "../../main/dashboard/analytics/featureCardbalanceCard";
 import ListCard from "../../main/dashboard/analytics/listCard";
 import AreaChart from "../../main/widgets/charts/areaChart";
 import ScatterChart from "../../main/widgets/charts/scatterChart";
-
+import ProtectedAppPage from "../Protected";
 export default function Analytics() {
   // Redux
   const customise = useSelector((state) => state.customise);
+  const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
+  const [data, setData] = useState([]);
 
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8083/api/dashboard/stats?companyId=${user?.user?.companyId}`,
+        {
+          headers: {
+            Authorization: user?.accessToken,
+            // Add other headers if needed
+          },
+        }
+      );
+      setData(response.data); // Assuming the response.data is an array of departments
+      console.log(response?.data);
+    } catch (error) {
+      console.error("Error fetching stats", error?.message);
+    }
+  };
+  useEffect(() => {
+    setUser(JSON.parse(localStorage?.getItem("user")));
+    // Fetch data when the component mounts
+    fetchData();
+  }, []);
   return (
     <>
       <Row gutter={[32, 32]} className="hp-mb-32">
@@ -63,7 +87,7 @@ export default function Analytics() {
                       />
                     }
                     title="Departments"
-                    count="15"
+                    count={data?.departmentCount || "0"}
                   />
                 </Col>
                 <Col sm={10} span={24}>
@@ -76,7 +100,7 @@ export default function Analytics() {
                       />
                     }
                     title="Projects"
-                    count="10"
+                    count={data?.projectCount || "0"}
                   />
                 </Col>
                 <Col sm={10} span={24}>
@@ -88,8 +112,8 @@ export default function Analytics() {
                         className="hp-text-color-black-bg hp-text-color-dark-0"
                       />
                     }
-                    title="Clients"
-                    count="43"
+                    title="MDR"
+                    count={data?.mdrCount || "0"}
                   />
                 </Col>
                 <Col sm={10} span={24}>
@@ -102,7 +126,7 @@ export default function Analytics() {
                       />
                     }
                     title="Employees"
-                    count="32"
+                    count={data?.employeeCount || "0"}
                   />
                 </Col>
               </Row>

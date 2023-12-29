@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 import { useSelector } from "react-redux";
@@ -42,7 +42,8 @@ export default function MenuProfile(props) {
   const location = useLocation();
   const { pathname } = location;
   const splitLocation = pathname.split("/");
-  const user = useSelector((state) => state.auth?.user);
+  const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
+  console.log(user, props);
   // Redux
   const customise = useSelector((state) => state.customise);
 
@@ -56,8 +57,8 @@ export default function MenuProfile(props) {
             <Avatar size={80} src={avatar} />
           </Badge> */}
 
-          <h3 className="hp-mt-24 hp-mb-4">{`${user?.firstName} ${user?.lastName}`}</h3>
-          <a href={`mailto:${user?.email}`} className="hp-p1-body">
+          <h3 className="hp-mt-24 hp-mb-4">{`${user?.user?.firstName} ${user?.user?.lastName}`}</h3>
+          <a href={`mailto:${user?.user?.email}`} className="hp-p1-body">
             {user?.email}
           </a>
         </div>
@@ -86,21 +87,21 @@ export default function MenuProfile(props) {
             </Link>
           </Menu.Item>
 
-          <Menu.Item
-            key="5"
-            icon={<Password set="curved" className={menuIconClass} />}
-            className={`
-              hp-mb-16 hp-pl-24 hp-pr-32
-              ${
-                splitLocation[splitLocation.length - 1] === "password-change"
-                  ? "ant-menu-item-selected"
-                  : "ant-menu-item-selected-in-active"
-              }
-            `}
-            onClick={props.onCloseDrawer}
-          >
-            <Link to="/pages/profile/password-change">Password Change</Link>
-          </Menu.Item>
+          {/* <Menu.Item */}
+          {/* key="5" */}
+          {/* icon={<Password set="curved" className={menuIconClass} />} */}
+          {/* className={` */}
+          {/* hp-mb-16 hp-pl-24 hp-pr-32 */}
+          {/* ${ */}
+          {/* splitLocation[splitLocation.length - 1] === "password-change" */}
+          {/* ? "ant-menu-item-selected" */}
+          {/* : "ant-menu-item-selected-in-active" */}
+          {/* } */}
+          {/* `} */}
+          {/* onClick={props.onCloseDrawer} */}
+          {/* > */}
+          {/* <Link to="/pages/profile/password-change">Password Change</Link> */}
+          {/* </Menu.Item> */}
         </Menu>
       </div>
 

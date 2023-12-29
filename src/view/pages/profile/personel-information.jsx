@@ -11,14 +11,18 @@ import {
   TimePicker,
   Button,
   Modal,
+  message,
 } from "antd";
 
 import { RiCloseFill, RiCalendarLine } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
-import { updateUser, updateUserInformation } from "../../../redux/auth/authActions";
-
+import {
+  updateUser,
+  updateUserInformation,
+} from "../../../redux/auth/authActions";
+import axios from "axios";
 export default function InfoProfile() {
-  const user = useSelector((state) => state.auth?.user);
+  const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
   const dispatch = useDispatch();
 
   const [firstName, setFirstName] = useState("");
@@ -30,35 +34,56 @@ export default function InfoProfile() {
   const [preferanceModalVisible, setPreferanceModalVisible] = useState(false);
 
   const listTitle = "hp-p1-body";
-  const listResult = "hp-mt-sm-4 hp-p1-body hp-text-color-black-100 hp-text-color-dark-0";
+  const listResult =
+    "hp-mt-sm-4 hp-p1-body hp-text-color-black-100 hp-text-color-dark-0";
   const dividerClass = "hp-border-color-black-40 hp-border-color-dark-80";
 
   useEffect(() => {
-    setFirstName(user?.firstName || '');
-    setLastName(user?.lastName || '');
-    setPhoneNumber(user?.phoneNumber || '')
-    setAddress(user?.address || '')
-  }, [])
+    setFirstName(user?.user?.firstName || "");
+    setLastName(user?.user?.lastName || "");
+    setPhoneNumber(user?.phoneNumber || "");
+    setAddress(user?.address || "");
+  }, []);
 
-  const updateUserInfo = () => {
-    const obj={ id: user?.id}
-    if(firstName){
-      obj.firstName=firstName
-    }if(lastName){
-      obj.lastName=lastName
-    }if(phoneNumber){
-      obj.phoneNumber=phoneNumber
+  const updateUserInfo = async () => {
+    const obj = {};
+    if (firstName) {
+      obj.firstName = firstName;
     }
-    if(address){
-      obj.address= address
+    if (lastName) {
+      obj.lastName = lastName;
     }
-    dispatch(updateUserInformation(obj))
-    setAddress("")
-    setFirstName("")
-    setLastName("")
-    setPhoneNumber("")
-    contactModalCancel()
-  }
+
+    try {
+      const response = await axios.put(
+        `http://127.0.0.1:8083/api/users/${user?.user?.id}`,
+        obj,
+        {
+          headers: {
+            Authorization: user?.accessToken,
+            // Add other headers if needed
+          },
+        }
+      );
+      // Handle the response as needed
+      console.log("response", response);
+      if (response?.status == 200) {
+        message.success("User Updated Successfully");
+        localStorage?.setItem("user", JSON.stringify(response?.data));
+        window.location.reload();
+      }
+    } catch (error) {
+      if (error?.message == "Request failed with status code 401") {
+        message.error("Unauthorized");
+      }
+      console.error("Error updating:", error?.message);
+    }
+    setAddress("");
+    setFirstName("");
+    setLastName("");
+    setPhoneNumber("");
+    contactModalCancel();
+  };
   const contactModalShow = () => {
     setContactModalVisible(true);
   };
@@ -88,18 +113,29 @@ export default function InfoProfile() {
           <RiCloseFill className="remix-icon text-color-black-100" size={24} />
         }
       >
-        <Form layout="vertical" name="basic" initialValues={{ remember: true, firstName, lastName, address, phoneNumber }}>
+        <Form
+          layout="vertical"
+          name="basic"
+          initialValues={{
+            remember: true,
+            firstName,
+            lastName,
+            address,
+            phoneNumber,
+          }}
+        >
           <Form.Item label="First Name" name="firstName">
-            <Input value={firstName} onChange={(e)=>setFirstName(e.target.value)} />
+            <Input
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+            />
           </Form.Item>
 
           <Form.Item label="Last Name" name="lastName">
-            <Input value={lastName} onChange={(e)=>setLastName(e.target.value)} />
-          </Form.Item>
-
-
-          <Form.Item label="Phone" name="phone">
-            <Input value={phoneNumber} onChange={(e)=>setPhoneNumber(e.target.value)} />
+            <Input
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+            />
           </Form.Item>
 
           {/* <Form.Item label="Date of Birth" name="dateofbirth">
@@ -110,10 +146,6 @@ export default function InfoProfile() {
               }
             />
           </Form.Item> */}
-
-          <Form.Item label="Address" name="address">
-            <Input.TextArea rows={3} value={address} onChange={(e)=>setAddress(e.target.value)} />
-          </Form.Item>
 
           <Row>
             <Col md={12} span={24} className="hp-pr-sm-0 hp-pr-12">
@@ -190,7 +222,9 @@ export default function InfoProfile() {
 
       <Row align="middle" justify="space-between">
         <Col md={12} span={24}>
-          <h3><FormattedMessage id="sidebar-apps-contact" /></h3>
+          <h3>
+            <FormattedMessage id="sidebar-apps-contact" />
+          </h3>
         </Col>
 
         <Col md={12} span={24} className="hp-profile-action-btn hp-text-right">
@@ -205,38 +239,32 @@ export default function InfoProfile() {
         >
           <ul>
             <li>
-              <span className={listTitle}><FormattedMessage id="pi-fname" /></span>
-              <span className={listResult}>{user?.firstName} {user?.lastName}</span>
+              <span className={listTitle}>
+                <FormattedMessage id="pi-fname" />
+              </span>
+              <span className={listResult}>
+                {user?.user?.firstName} {user?.user?.lastName}
+              </span>
             </li>
 
             <li>
-              <span className={listTitle}><FormattedMessage id="pi-fn" /></span>
-              <span className={listResult}>{user?.firstName}</span>
+              <span className={listTitle}>
+                <FormattedMessage id="pi-fn" />
+              </span>
+              <span className={listResult}>{user?.user?.firstName}</span>
             </li>
             <li>
-              <span className={listTitle}><FormattedMessage id="pi-ln" /></span>
-              <span className={listResult}>{user?.lastName}</span>
-            </li>
-
-              
-
-            <li className="hp-mt-18">
-              <span className={listTitle}><FormattedMessage id="pi-email" /></span>
-              <span className={listResult}>{user?.email}</span>
+              <span className={listTitle}>
+                <FormattedMessage id="pi-ln" />
+              </span>
+              <span className={listResult}>{user?.user?.lastName}</span>
             </li>
 
             <li className="hp-mt-18">
-              <span className={listTitle}><FormattedMessage id="pi-phone" /></span>
-              <a className={listResult} href="tel:+900374323">
-                {user?.phoneNumber}
-              </a>
-            </li>
-
-          
-
-            <li className="hp-mt-18">
-              <span className={listTitle}><FormattedMessage id="pi-address" /></span>
-              <span className={listResult}>{user?.address}</span>
+              <span className={listTitle}>
+                <FormattedMessage id="pi-email" />
+              </span>
+              <span className={listResult}>{user?.user?.email}</span>
             </li>
           </ul>
         </Col>

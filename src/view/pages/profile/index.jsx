@@ -59,11 +59,11 @@ export default function Profile() {
           />
         }
       >
-        {/* <MenuProfile
+        <MenuProfile
           onCloseDrawer={onClose}
           moreBtnCheck="none"
           footer="none"
-        /> */}
+        />
       </Drawer>
 
       {/* <Col span={24}>

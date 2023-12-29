@@ -210,12 +210,12 @@ const pages = [
   // icon: <Award size={18} />,
   // navLink: "/pages/landing",
   //   },
-  {
-    id: "home-workspace",
-    title: <IntlMessages id="sidebar-pages-home" />,
-    icon: <Home size={18} />,
-    navLink: "/pages/workspace",
-  },
+  // {
+  // id: "home-workspace",
+  // title: <IntlMessages id="sidebar-pages-home" />,
+  // icon: <Home size={18} />,
+  // navLink: "/pages/workspace",
+  // },
 
   // {
   //     id: "workspace",
@@ -291,12 +291,12 @@ const pages = [
     navLink: "/pages/documents",
   },
 
-  {
-    id: "clients",
-    title: <IntlMessages id="sidebar-pages-clients" />,
-    icon: <Profile size={18} />,
-    navLink: "/pages/profile/personel-information",
-  },
+  // {
+  //   id: "clients",
+  //   title: <IntlMessages id="sidebar-pages-clients" />,
+  //   icon: <Profile size={18} />,
+  //   navLink: "/pages/profile/personel-information",
+  // },
   {
     id: "profile-personel-information",
     title: <IntlMessages id="sidebar-pages-profile-personel-information" />,
