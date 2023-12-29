@@ -129,7 +129,7 @@ export default function Document() {
       const formData = new FormData();
       formData.append("file", file);
       const mdrObj = mdrOptions.find((item) => item?.value == mdr);
-      console.log(mdrObj, mdr);
+      console.log(mdrObj, mdr, user);
       const obj = {
         title: docTitle,
         departmentId: mdrObj?.departmentId,
@@ -138,6 +138,9 @@ export default function Document() {
         content: textEditorValue,
         extension,
         companyId: user?.user?.companyId,
+        roleId: user?.user?.roleId,
+        userId: user?.user?.id,
+        userName: `${user?.user?.firstName} ${user?.user?.lastName}`,
       };
       Object.entries(obj).forEach(([key, value]) => {
         formData.append(key, value);
@@ -159,7 +162,10 @@ export default function Document() {
       documentModalCancel();
     } catch (error) {
       // Handle errors
-      console.error("Error adding documents:", error);
+
+      if (error?.message == "Request failed with status code 403") {
+        message.error("Permission Denied to create document on this MDR");
+      }
     }
   };
   const fetchData = async () => {
