@@ -16,6 +16,7 @@ export default function Analytics() {
   const customise = useSelector((state) => state.customise);
   const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
   const [data, setData] = useState([]);
+  const [systemLog, setSystemLog] = useState([]);
 
   const fetchData = async () => {
     try {
@@ -28,16 +29,28 @@ export default function Analytics() {
           },
         }
       );
+      const logs = [];
+      for (const item of response?.data?.logs) {
+        logs.push({
+          icon: <Login />,
+          title: item?.title,
+          date: item?.createdAt,
+        });
+      }
+      response.data.logs = logs;
       setData(response.data); // Assuming the response.data is an array of departments
+
       console.log(response?.data);
     } catch (error) {
       console.error("Error fetching stats", error?.message);
     }
   };
+
   useEffect(() => {
     setUser(JSON.parse(localStorage?.getItem("user")));
     // Fetch data when the component mounts
     fetchData();
+    // fetchSystemLogs();
   }, []);
   return (
     <>
@@ -132,62 +145,7 @@ export default function Analytics() {
               </Row>
             </Col>
             <Col span={24}>
-              <ListCard
-                title="System Logs"
-                date="05 Dec 2021"
-                list={[
-                  {
-                    icon: <Login />,
-                    title: "Mike Logged In",
-                    date: "11:30",
-                  },
-                  {
-                    icon: <Add />,
-                    title: "Jack Created Project",
-                    date: "11:34",
-                  },
-                  {
-                    icon: <Logout />,
-                    title: "Mike Logged Out",
-                    date: "11:34",
-                  },
-                  {
-                    icon: <Add />,
-                    title: "Kim Created Project",
-                    date: "11:37",
-                  },
-                  {
-                    icon: <Add />,
-                    title: "Jackey Created Project",
-                    date: "13:34",
-                  },
-                  {
-                    icon: <Add />,
-                    title: "Jack Created Project",
-                    date: "14:34",
-                  },
-                  {
-                    icon: <Add />,
-                    title: "Jack Created Project",
-                    date: "19:14",
-                  },
-                  {
-                    icon: <Logout />,
-                    title: "Hne Logged Out",
-                    date: "20:12:",
-                  },
-                  {
-                    icon: <Logout />,
-                    title: "Kim Logged Out",
-                    date: "20:45",
-                  },
-                  {
-                    icon: <Logout />,
-                    title: "Jack Logged Out",
-                    date: "21:34",
-                  },
-                ]}
-              />
+              <ListCard title="System Logs" list={data?.logs} />
             </Col>
           </Row>
         </Col>
