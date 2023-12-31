@@ -44,54 +44,13 @@ const uploadProps = {
     }
   },
 };
-const columns = [
-  {
-    title: "Document Title",
-    dataIndex: "title",
-    key: "title",
-  },
-  {
-    title: "Dept Id",
-    dataIndex: "departmentId",
-    key: "departmentId",
-  },
-  {
-    title: "Project Id",
-    dataIndex: "projectId",
-    key: "projectId",
-  },
-  {
-    title: "Author Id",
-    dataIndex: "authorId",
-    key: "authorId",
-  },
-  {
-    title: "Author Name",
-    dataIndex: "authorName",
-    key: "authorName",
-  },
-  {
-    title: "No of Documents",
-    dataIndex: "noOfDocuments",
-    key: "noOfDocuments",
-  },
-
-  {
-    title: "Action",
-    key: "action",
-    render: (_, record) => (
-      <Space size="middle">
-        <a>Delete</a>
-      </Space>
-    ),
-  },
-];
 
 export default function MDR() {
   const [documentModalVisible, setDocumentModalVisible] = useState(false);
   const [title, setTitle] = useState("");
   const [projectId, setProjectId] = useState("");
   const [departmentId, setDepartmentId] = useState("");
+  const [mdrCode, setMdrCode] = useState("");
   const [noOfDocuments, setNoOfDocuments] = useState("");
   const [departmentOptions, setDepartments] = useState([]);
   const [projectOptions, setProjects] = useState([]);
@@ -111,6 +70,11 @@ export default function MDR() {
 
   const addDocument = async () => {
     try {
+      const project = projectOptions.find((item) => item?.value == projectId);
+      const department = departmentOptions.find(
+        (item) => item?.value == departmentId
+      );
+
       const response = await axios.post(
         "http://127.0.0.1:8083/api/documents/mdr",
         {
@@ -121,6 +85,9 @@ export default function MDR() {
           companyId: user?.user?.companyId,
           authorId: user?.user?.id,
           authorName: `${user?.user?.firstName} ${user?.user?.lastName}`,
+          mdrCode,
+          projectCode: project?.code,
+          departmentName: department?.label,
         },
         {
           headers: {
@@ -137,6 +104,24 @@ export default function MDR() {
     } catch (error) {
       // Handle errors
       console.error("Error adding documents:", error);
+    }
+  };
+  const exportCSV = async (record) => {
+    try {
+      console.log(record);
+      const response = await axios.post(
+        `http://127.0.0.1:8083/api/documents/export/${record?.id}?companyId=${user?.user?.companyId}`,
+        {
+          headers: {
+            Authorization: user?.accessToken,
+            // Add other headers if needed
+          },
+        }
+      );
+
+      message.success(response?.data?.message);
+    } catch (error) {
+      console.error("Error fetching documents:", error?.message);
     }
   };
   const fetchData = async () => {
@@ -188,7 +173,7 @@ export default function MDR() {
       );
       const options = [];
       for (const item of response?.data) {
-        options.push({ value: item?.id, label: item?.title });
+        options.push({ value: item?.id, label: item?.title, code: item?.code });
       }
       setProjects(options); // Assuming the response.data is an array of projects
     } catch (error) {
@@ -231,6 +216,21 @@ export default function MDR() {
                 <Input
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
+                />
+              </Form.Item>
+              <Form.Item
+                label="MDR Code"
+                name="docCode"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input your code",
+                  },
+                ]}
+              >
+                <Input
+                  value={title}
+                  onChange={(e) => setMdrCode(e.target.value)}
                 />
               </Form.Item>
 
@@ -310,11 +310,69 @@ export default function MDR() {
         </Row>
       </Modal>
       <div style={{ textAlign: "right", marginBottom: "16px" }}>
-        <Button type="primary" onClick={documentModalShow}>
+        <Button
+          type="primary"
+          onClick={documentModalShow}
+          disabled={user?.user?.roleId != 1}
+        >
           Add Master Document Register
         </Button>
       </div>
-      <Table columns={columns} dataSource={data} />
+      <Table
+        columns={[
+          {
+            title: "Document Title",
+            dataIndex: "title",
+            key: "title",
+          },
+          {
+            title: "Dept Id",
+            dataIndex: "departmentId",
+            key: "departmentId",
+          },
+          {
+            title: "Project Id",
+            dataIndex: "projectId",
+            key: "projectId",
+          },
+          {
+            title: "Author Id",
+            dataIndex: "authorId",
+            key: "authorId",
+          },
+          {
+            title: "Author Name",
+            dataIndex: "authorName",
+            key: "authorName",
+          },
+          {
+            title: "No of Documents",
+            dataIndex: "noOfDocuments",
+            key: "noOfDocuments",
+          },
+
+          {
+            title: "Action",
+            key: "action",
+            render: (_, record) => (
+              <>
+                <Space size="middle">
+                  <Button
+                    key={record?.id}
+                    onClick={() => {
+                      exportCSV(record);
+                    }}
+                    disabled={user?.user?.roleId != 1}
+                  >
+                    Export
+                  </Button>
+                </Space>
+              </>
+            ),
+          },
+        ]}
+        dataSource={data}
+      />
       <ProtectedAppPage />
     </>
   );

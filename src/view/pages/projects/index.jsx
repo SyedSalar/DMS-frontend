@@ -291,7 +291,11 @@ export default function Projects() {
       </Modal>
 
       <div style={{ textAlign: "right", marginBottom: "16px" }}>
-        <Button type="primary" onClick={projectModalShow}>
+        <Button
+          type="primary"
+          onClick={projectModalShow}
+          disabled={user?.user?.roleId != 1}
+        >
           Add Project
         </Button>
       </div>

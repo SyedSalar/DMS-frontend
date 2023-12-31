@@ -296,7 +296,11 @@ export default function DocumentPermissions() {
       </Modal>
 
       <div style={{ textAlign: "right", marginBottom: "16px" }}>
-        <Button type="primary" onClick={DocumentPermissionModalShow}>
+        <Button
+          type="primary"
+          onClick={DocumentPermissionModalShow}
+          disabled={user?.user?.roleId != 1}
+        >
           Add Permissions
         </Button>
       </div>

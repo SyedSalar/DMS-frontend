@@ -224,7 +224,11 @@ export default function Users() {
       </Modal>
 
       <div style={{ textAlign: "right", marginBottom: "16px" }}>
-        <Button type="primary" onClick={UserModalShow}>
+        <Button
+          type="primary"
+          onClick={UserModalShow}
+          disabled={user?.user?.roleId != 1}
+        >
           Add User
         </Button>
       </div>

@@ -175,7 +175,11 @@ export default function Depatments() {
         </Row>
       </Modal>
       <div style={{ textAlign: "right", marginBottom: "16px" }}>
-        <Button type="primary" onClick={departmentModalShow}>
+        <Button
+          type="primary"
+          onClick={departmentModalShow}
+          disabled={user?.user?.roleId != 1}
+        >
           Add Department
         </Button>
       </div>
