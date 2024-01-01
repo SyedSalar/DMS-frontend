@@ -11,6 +11,7 @@ import ListCard from "../../main/dashboard/analytics/listCard";
 import AreaChart from "../../main/widgets/charts/areaChart";
 import ScatterChart from "../../main/widgets/charts/scatterChart";
 import ProtectedAppPage from "../Protected";
+import DonutChart from "../../main/widgets/charts/donutChart";
 export default function Analytics() {
   // Redux
   const customise = useSelector((state) => state.customise);
@@ -65,7 +66,7 @@ export default function Analytics() {
               <AreaChart />
             </Col>
             <Col span={24}>
-              <ScatterChart />
+             <DonutChart/>
             </Col>
           </Row>
         </Col>

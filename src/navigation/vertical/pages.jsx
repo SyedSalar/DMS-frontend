@@ -210,12 +210,12 @@ const pages = [
   // icon: <Award size={18} />,
   // navLink: "/pages/landing",
   //   },
-  // {
-  // id: "home-workspace",
-  // title: <IntlMessages id="sidebar-pages-home" />,
-  // icon: <Home size={18} />,
-  // navLink: "/pages/workspace",
-  // },
+  {
+  id: "home-workspace",
+  title: <IntlMessages id="sidebar-pages-home" />,
+  icon: <Home size={18} />,
+  navLink: "/pages/workspace",
+  },
 
   // {
   //     id: "workspace",

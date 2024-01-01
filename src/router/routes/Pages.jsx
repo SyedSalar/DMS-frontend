@@ -7,7 +7,7 @@ const PagesRoutes = [
     path: "/pages/workspace",
     component: lazy(() => import("../../view/main/widgets/charts")),
     layout: "VerticalLayout",
-    isProtected: true,
+    isProtected: false,
   },
   {
     path: "/pages/analytics",
