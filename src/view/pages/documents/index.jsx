@@ -398,7 +398,11 @@ export default function Document() {
         </Row>
       </Modal>
       <div style={{ textAlign: "right", marginBottom: "16px" }}>
-        <Button type="primary" onClick={documentModalShow}>
+        <Button
+          type="primary"
+          onClick={documentModalShow}
+          disabled={user?.user?.roleId == 3}
+        >
           Add Documents
         </Button>
       </div>

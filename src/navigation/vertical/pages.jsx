@@ -291,7 +291,13 @@ const pages = [
     navLink: "/pages/documents",
   },
   {
-    id: "documents",
+    id: "document-number",
+    title: <IntlMessages id="sidebar-pages-document-number" />,
+    icon: <Profile size={18} />,
+    navLink: "/pages/document-number",
+  },
+  {
+    id: "documents-permissions",
     title: <IntlMessages id="sidebar-pages-document-permissions" />,
     icon: <Profile size={18} />,
     navLink: "/pages/document-permissions",
