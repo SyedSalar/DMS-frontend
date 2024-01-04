@@ -44,55 +44,57 @@ const uploadProps = {
     }
   },
 };
-const columns = [
-  {
-    title: "Document Id",
-    dataIndex: "id",
-    key: "id",
-  },
-  {
-    title: "Document Title",
-    dataIndex: "title",
-    key: "title",
-  },
-  {
-    title: "Dept Id",
-    dataIndex: "departmentId",
-    key: "departmentId",
-  },
-  {
-    title: "Project Id",
-    dataIndex: "projectId",
-    key: "projectId",
-  },
-  {
-    title: "MDR",
-    dataIndex: "masterDocumentId",
-    key: "masterDocumentId",
-  },
-  {
-    title: ".exe",
-    dataIndex: "extension",
-    key: "extension",
-  },
-  {
-    title: "Status",
-    dataIndex: "status",
-    key: "status",
-  },
-
-  {
-    title: "Action",
-    key: "action",
-    render: (_, record) => (
-      <Space size="middle">
-        <a>Delete</a>
-      </Space>
-    ),
-  },
-];
 
 export default function Document() {
+  const columns = [
+    {
+      title: "Document Id",
+      dataIndex: "id",
+      key: "id",
+    },
+    {
+      title: "Document Title",
+      dataIndex: "title",
+      key: "title",
+    },
+    {
+      title: "Dept Id",
+      dataIndex: "departmentId",
+      key: "departmentId",
+    },
+    {
+      title: "Project Id",
+      dataIndex: "projectId",
+      key: "projectId",
+    },
+    {
+      title: "MDR",
+      dataIndex: "masterDocumentId",
+      key: "masterDocumentId",
+    },
+    {
+      title: ".exe",
+      dataIndex: "extension",
+      key: "extension",
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+    },
+  
+    {
+      title: "Action",
+      key: "action",
+      render: (_, record) => (
+        <Space size="middle">
+          <a>Delete</a>
+          <a onClick={() => statusModalShow(record)}>Add Status</a>
+        </Space>
+      ),
+    },
+  ];
+  
   const [documentModalVisible, setDocumentModalVisible] = useState(false);
   const [docTitle, setDocTitle] = useState("");
   const [projectId, setProjectId] = useState("");
@@ -250,16 +252,118 @@ export default function Document() {
       console.error("Error fetching departments:", error?.message);
     }
   };
-  useEffect(() => {
-    setUser(JSON.parse(localStorage?.getItem("user")));
-    // Fetch data when the component mounts
-    fetchDepartments();
-    fetchProjects();
-    fetchMDR();
-    fetchData();
-  }, []);
+  const [statusModalVisible, setStatusModalVisible] = useState(false);
+const [selectedStatus, setSelectedStatus] = useState("");
+const statusModalShow = () => {
+  setStatusModalVisible(true);
+};
+
+const statusModalCancel = () => {
+  setSelectedStatus("");
+  setStatusModalVisible(false);
+};
+const [updatedData, setUpdatedData] = useState([]);
+
+const handleStatusChange = (selectedStatus, record) => {
+  // Perform your logic to update the status here
+  // You can use the selectedStatus along with the record data
+  // to update the status in the data array or make an API call
+
+  // Check if the record is defined before accessing its properties
+  if (record && record.id) {
+    const updatedRecord = { ...record, status: selectedStatus };
+
+    // Update the data array with the modified record
+    const updatedDataArray = data.map((item) =>
+      item.id === record.id ? updatedRecord : item
+    );
+
+    // Trigger a re-render with the updated data
+    setUpdatedData(updatedDataArray);
+  }
+
+  // Close the status modal
+  statusModalCancel();
+};
+
+
+useEffect(() => {
+  setUser(JSON.parse(localStorage?.getItem("user")));
+  // Fetch data when the component mounts
+  fetchDepartments();
+  fetchProjects();
+  fetchMDR();
+  fetchData();
+}, [updatedData]); // Add updatedData as a dependency
+
+useEffect(() => {
+  // Update the data state with the updatedData
+  setData(updatedData);
+}, [updatedData]);
   return (
     <>
+    <Modal
+  title="Change Status"
+  width={400}
+  centered
+  visible={statusModalVisible}
+  onCancel={statusModalCancel}
+  footer={null}
+  closeIcon={<RiCloseFill className="remix-icon text-color-black-100" size={24} />}
+>
+  <Row justify="space-between" align="center">
+    <Col span={20}>
+      <Form layout="vertical" name="basic">
+        <Form.Item
+          label="Select Status"
+          name="selectedStatus"
+          rules={[
+            {
+              required: true,
+              message: "Please select a status",
+            },
+          ]}
+        >
+          <Select
+            options={[
+              { label: "In-Progress", value: "in-progress" },
+      { label: "Hold", value: "hold" },
+      { label: "Pending Review (In-House)", value: "pending-review-in-house" },
+      { label: "Pending Approval (In-House)", value: "pending-approval-in-house" },
+      { label: "Reviewed (In-House)", value: "reviewed-in-house" },
+      { label: "Approved (In-House)", value: "approved-in-house" },
+      { label: "Pending Review (Client)", value: "pending-review-client" },
+      { label: "Pending Endorsement (Client)", value: "pending-endorsement-client" },
+      { label: "Endorsed (Client)", value: "endorsed-client" },
+      { label: "Document Ready to Publish", value: "ready-to-publish" },
+              // ... (add other status options)
+            ]}
+            value={selectedStatus}
+            onChange={(value) => setSelectedStatus(value)}
+          />
+        </Form.Item>
+        {/* ... (your existing code) */}
+        <Row>
+          <Col md={12} span={24} className="hp-pr-sm-0 hp-pr-12">
+            <Button
+              block
+              type="primary"
+              htmlType="submit"
+              onClick={() => handleStatusChange(selectedStatus)}
+            >
+              Submit
+            </Button>
+          </Col>
+          <Col md={12} span={24} className="hp-mt-sm-12 hp-pl-sm-0 hp-pl-12">
+            <Button block onClick={statusModalCancel}>
+              Cancel
+            </Button>
+          </Col>
+        </Row>
+      </Form>
+    </Col>
+  </Row>
+</Modal>
       <Modal
         title="Upload Document"
         width={1000}

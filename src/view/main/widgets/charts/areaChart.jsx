@@ -12,24 +12,24 @@ export default function AreaChart() {
   const [data] = useState({
     series: [
       {
-        name: "Visit",
+        name: "Docs Approved by Project Manager",
         data: [
-          10877, 29334, 33233, 36439, 32675, 32333, 33457, 38345, 36783, 30457,
-          28459, 29840,
+          9, 9, 8, 7, 3, 1, 3, 9, 7, 3,
+          9, 4,
         ],
       },
       {
-        name: "Click",
+        name: "Docs Approved by Client",
         data: [
-          8753, 21313, 24623, 28935, 27345, 23465, 27813, 29125, 26256, 24356,
-          20233, 24570,
+          7, 6, 3, 3, 1, 5, 8, 6, 2, 2,
+          7, 2,
         ],
       },
       {
-        name: "Sales",
+        name: "Working Docs",
         data: [
-          6000, 11313, 14623, 18935, 17345, 13465, 17813, 19125, 16256, 20356,
-          16233, 14570,
+          2, 3, 5, 4, 6, 8, 2, 3, 5, 1,
+          2, 2,
         ],
       },
     ],
@@ -88,18 +88,18 @@ export default function AreaChart() {
           },
         },
         categories: [
-          "Jan",
-          "Feb",
-          "Mar",
-          "Apr",
-          "May",
-          "Jun",
-          "Jul",
-          "Aug",
-          "Sep",
-          "Oct",
-          "Nov",
-          "Dec",
+          "Project1",
+          "Project2",
+          "Project3",
+          "Project4",
+          "Project5",
+          "Project6",
+          "Project7",
+          "Project8",
+          "Project9",
+          "Project10",
+          "Project11",
+          "Project12",
         ],
       },
       legend: {
@@ -119,13 +119,13 @@ export default function AreaChart() {
             fontSize: "14px",
           },
           formatter: (value) => {
-            return value / 1000 + "K";
+            return value;
           },
         },
 
         min: 0,
-        max: 40000,
-        tickAmount: 4,
+        max: 10,
+        tickAmount: 5,
       },
     },
   });
@@ -136,8 +136,7 @@ export default function AreaChart() {
         <Col className="hp-mb-16" span={24}>
           <Row justify="space-between">
             <Row align="bottom" className="hp-pb-16">
-              <h4 className="hp-mr-8">Area Chart</h4>
-              <p className="hp-badge-text">Website Visit</p>
+              <h4 className="hp-mr-8">Documents In Projects</h4>
             </Row>
             
             <Col>

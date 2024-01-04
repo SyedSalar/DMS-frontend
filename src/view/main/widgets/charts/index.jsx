@@ -18,8 +18,8 @@ export default function Charts() {
   return (
     <Row gutter={[32, 32]} className="hp-mb-32">
       <Col span={24}>
-        <PageContent
-          title="Charts"
+        {/* <PageContent
+          title="Hello! Mr Salar Jafri"
           desc="We used Apex Charts and customized for Yoda "
           breadcrumb={[
             {
@@ -32,9 +32,15 @@ export default function Charts() {
               title: "Charts",
             }
           ]}
-        />
+        /> */}
+      </Col>
+      <Col xl={12} lg={24}>
+        <DonutChart />
       </Col>
 
+      <Col xl={12} lg={24}>
+        <RadialbarChart />
+      </Col>
       <Col span={24}>
         <LineChart />
       </Col>
@@ -59,21 +65,15 @@ export default function Charts() {
         <HeatmapChart />
       </Col>
       
-      <Col xl={12} lg={24}>
+      {/* <Col xl={12} lg={24}>
         <RadarChart />
-      </Col>
+      </Col> */}
       
-      <Col xl={12} lg={24}>
+      {/* <Col xl={12} lg={24}>
         <CandlestickChart />
-      </Col>
+      </Col> */}
 
-      <Col xl={12} lg={24}>
-        <DonutChart />
-      </Col>
-
-      <Col xl={12} lg={24}>
-        <RadialbarChart />
-      </Col>
+   
     </Row>
   );
 }

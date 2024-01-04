@@ -12,8 +12,8 @@ export default function BarChart() {
   const [data] = useState({
     series: [
       {
-        name: "Expenses",
-        data: [4477, 7834, 8233, 6039, 5575, 6933, 6357],
+        name: "Team Size",
+        data: [9, 12, 13, 7, 4, 11, 8,5,14,10,6,3],
       },
     ],
     options: {
@@ -73,13 +73,18 @@ export default function BarChart() {
           },
         },
         categories: [
-          "Sun, 23",
-          "Sat, 22",
-          "Fri, 21",
-          "Thu, 20",
-          "Wed, 19",
-          "Tue, 18",
-          "Mon, 17",
+          "Project1",
+          "Project2",
+          "Project3",
+          "Project4",
+          "Project5",
+          "Project6",
+          "Project7",
+          "Project8",
+          "Project9",
+          "Project10",
+          "Project11",
+          "Project12",
         ],
       },
       legend: {
@@ -109,8 +114,7 @@ export default function BarChart() {
         <Col span={24}>
           <Row justify="space-between" align="top">
             <Col className="hp-pb-16">
-              <h4 className="hp-mr-8">Bar Chart</h4>
-              <p className="hp-badge-text">Expenses</p>
+              <h4 className="hp-mr-8">Team Size</h4>
             </Col>
             
             <Col>

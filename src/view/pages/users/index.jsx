@@ -10,6 +10,8 @@ import {
   Input,
   Modal,
   message,
+  Checkbox,
+  Select
 } from "antd";
 import { RiCloseFill, RiCalendarLine } from "react-icons/ri";
 import axios from "axios";
@@ -52,8 +54,23 @@ const columns = [
 ];
 
 export default function Users() {
+  const [selectedDepartments, setSelectedDepartments] = useState([]);
+
+  const departmentOptions = [
+    { label: 'Project Management', value: 'projectManagement' },
+    { label: 'Process', value: 'process' },
+    { label: 'Mechanical', value: 'mechanical' },
+    { label: 'Electrical', value: 'electrical' },
+    { label: 'Instrumentation', value: 'instrumentation' },
+    { label: 'Civil / Structure', value: 'civilStructure' },
+    { label: 'Finance', value: 'finance' },
+    { label: 'HR / Admin', value: 'hrAdmin' },
+    { label: 'Quality', value: 'quality' },
+  ];
   const [userModalVisible, setUserModalVisible] = useState(false);
   const [email, setEmail] = useState("");
+  const [role, setRole] = useState("");
+
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const isEmailValid = /\S+@\S+\.\S+/.test(email);
@@ -183,7 +200,29 @@ export default function Users() {
               onChange={(e) => setEmail(e.target.value)}
             />
           </Form.Item>
-
+          <Form.Item label="Role"  name="role">
+            <Select
+              defaultValue="Head"
+              options={[
+                { value: "head", label: "Head" },
+                { value: "seniorEngineer", label: "Senior Engineer" },
+                { value: "juniorEngineer", label: "Junior Engineer" },
+                { value: "designer", label: "Designer/Draftsmen" },
+              ]}
+              value={role}
+              onChange={(e) => setRole(e)}
+            /></Form.Item>
+          <Form.Item
+          label="Select Department"
+          rules={[
+           
+            {
+              required: true,
+              message: "Please select one department!",
+            },
+          ]}>
+          <Checkbox.Group options={departmentOptions} value={selectedDepartments} onChange={setSelectedDepartments} />
+   </Form.Item>
           <Row>
             <Col md={12} span={24} className="hp-pr-sm-0 hp-pr-12">
               <Button

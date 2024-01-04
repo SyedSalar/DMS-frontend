@@ -17,6 +17,7 @@ import {
   Modal,
   message,
   Upload,
+  Checkbox
 } from "antd";
 import { Radio } from "antd";
 import axios from "axios";
@@ -52,11 +53,22 @@ export default function MDR() {
   const [departmentId, setDepartmentId] = useState("");
   const [mdrCode, setMdrCode] = useState("");
   const [noOfDocuments, setNoOfDocuments] = useState("");
-  const [departmentOptions, setDepartments] = useState([]);
   const [projectOptions, setProjects] = useState([]);
   const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
   const [data, setData] = useState([]);
+  const [selectedDepartments, setSelectedDepartments] = useState([]);
 
+  const departmentOptions = [
+    { label: 'Project Management', value: 'projectManagement' },
+    { label: 'Process', value: 'process' },
+    { label: 'Mechanical', value: 'mechanical' },
+    { label: 'Electrical', value: 'electrical' },
+    { label: 'Instrumentation', value: 'instrumentation' },
+    { label: 'Civil / Structure', value: 'civilStructure' },
+    { label: 'Finance', value: 'finance' },
+    { label: 'HR / Admin', value: 'hrAdmin' },
+    { label: 'Quality', value: 'quality' },
+  ];
   const documentModalShow = () => {
     setDocumentModalVisible(true);
   };
@@ -235,21 +247,12 @@ export default function MDR() {
               </Form.Item>
 
               <Form.Item
-                label="Department Name"
-                name="deptName"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please select Department Name",
-                  },
-                ]}
-              >
-                <Select
-                  options={departmentOptions}
-                  value={departmentId}
-                  onChange={(value) => setDepartmentId(value)}
-                />
-              </Form.Item>
+        label="Departments"
+        name="departmentIds"
+        rules={[{ required: true, message: 'Please select at least one department' }]}
+      >
+        <Checkbox.Group options={departmentOptions} value={selectedDepartments} onChange={setSelectedDepartments} />
+      </Form.Item>
 
               <Form.Item
                 label="Project Name"

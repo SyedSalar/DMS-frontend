@@ -14,7 +14,7 @@ export default function RadialbarChart() {
   );
 
   const [data] = useState({
-    series: [61, 82, 65],
+    series: [75,57, 50, 46],
     options: {
       chart: {
         fontFamily: "Manrope, sans-serif",
@@ -26,9 +26,9 @@ export default function RadialbarChart() {
           enabled: false,
         },
       },
-      colors: ["#00F7BF", "#0010F7", "#FFC700"],
+      colors: ["#00F7BF", "#0010F7", "#FFC700","#EFC6A2"],
 
-      labels: ["Ebay", "Amazon", "Web"],
+      labels: ["Reviewed Pending", "Approved Pending", "Reviewed","Approved"],
 
       dataLabels: {
         enabled: false,
@@ -39,9 +39,9 @@ export default function RadialbarChart() {
 
       plotOptions: {
         radialBar: {
-          size: 185,
+          size: 100,
           hollow: {
-            size: "25%",
+            size: "30%",
           },
 
           track: {
@@ -60,7 +60,7 @@ export default function RadialbarChart() {
               fontSize: "16px",
               label: "Total",
               formatter: function (w) {
-                return 7400;
+                return 100;
               },
             },
           },
@@ -90,8 +90,7 @@ export default function RadialbarChart() {
         <Col span={24}>
           <Row justify="space-between" align="top">
             <Col>
-              <h4 className="hp-mr-8">Radialbar Chart</h4>
-              <p className="hp-badge-text">Marketplace</p>
+            <h4 className="hp-mr-8">Projects</h4>
             </Col>
 
             <Col>

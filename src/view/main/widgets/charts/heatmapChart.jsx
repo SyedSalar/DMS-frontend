@@ -33,52 +33,87 @@ export default function HeatmapChart() {
   const [data] = useState({
     series: [
       {
-        name: "SUN",
-        data: generateData(24, {
+        name: "Project 12",
+        data: generateData(4, {
           min: 0,
-          max: 40,
+          max: 26,
         }),
       },
       {
-        name: "MON",
-        data: generateData(24, {
+        name: "Project 11",
+        data: generateData(4, {
           min: 0,
-          max: 40,
+          max: 21,
+        }),
+      },
+      {  
+        name: "Project 10",
+        data: generateData(4, {
+          min: 0,
+          max: 20,
         }),
       },
       {
-        name: "TUE",
-        data: generateData(24, {
+        name: "Project 9",
+        data: generateData(4, {
           min: 0,
-          max: 40,
+          max: 27,
         }),
       },
       {
-        name: "WED",
-        data: generateData(24, {
+        name: "Project 8",
+        data: generateData(4, {
           min: 0,
-          max: 40,
+          max: 21,
         }),
       },
       {
-        name: "THU",
-        data: generateData(24, {
+        name: "Project 7",
+        data: generateData(4, {
           min: 0,
-          max: 40,
+          max: 22,
         }),
       },
       {
-        name: "FRI",
-        data: generateData(24, {
+        name: "Project 6",
+        data: generateData(4, {
           min: 0,
-          max: 40,
+          max: 24,
         }),
       },
       {
-        name: "SAT",
-        data: generateData(24, {
+        name: "Project 5",
+        data: generateData(4, {
           min: 0,
-          max: 40,
+          max: 20,
+        }),
+      },
+      {
+        name: "Project 4",
+        data: generateData(4, {
+          min: 0,
+          max: 25,
+        }),
+      },
+      {
+        name: "Project 3",
+        data: generateData(4, {
+          min: 0,
+          max: 23,
+        }),
+      },
+      {
+        name: "Project 2",
+        data: generateData(4, {
+          min: 0,
+          max: 20,
+        }),
+      },
+      {
+        name: "Project 1",
+        data: generateData(4, {
+          min: 0,
+          max: 28,
         }),
       },
     ],
@@ -102,26 +137,26 @@ export default function HeatmapChart() {
             ranges: [
               {
                 from: 0,
-                to: 10,
-                name: "0-10",
+                to: 7,
+                name: "Initialize",
                 color: "#EBFAFA",
               },
               {
-                from: 11,
-                to: 20,
-                name: "10-20",
+                from: 8,
+                to: 14,
+                name: "Working",
                 color: "#55B1F3",
               },
               {
-                from: 21,
-                to: 30,
-                name: "20-30",
+                from: 15,
+                to: 21,
+                name: "Reviewed",
                 color: "#0063F7",
               },
               {
-                from: 31,
-                to: 40,
-                name: "30-40",
+                from: 22,
+                to: 28,
+                name: "Approved",
                 color: "#0010F7",
               },
             ],
@@ -183,8 +218,7 @@ export default function HeatmapChart() {
         <Col span={24}>
           <Row justify="space-between">
             <Col align="bottom">
-              <h4 className="hp-mr-8">Heatmap Chart</h4>
-              <p className="hp-badge-text">Sales</p>
+              <h4 className="hp-mr-8">Working Days</h4>
             </Col>
             
             <Col>

@@ -12,17 +12,17 @@ export default function ColumnChart() {
   const [data] = useState({
     series: [
       {
-        name: "Earning",
+        name: "Complete %",
         data: [
-          28877, 29334, 33233, 36439, 32675, 32333, 33457, 38345, 36783, 39457,
-          22459, 39840,
+          50, 40, 70, 90, 60, 80, 55, 30, 10, 5,
+          15, 25,
         ],
       },
       {
-        name: "Expense",
+        name: "Remaining %",
         data: [
-          12010, 11313, 14623, 18935, 17345, 13465, 17813, 19125, 16256, 20356,
-          12233, 14570,
+          50, 60,30 , 10, 40, 20, 45, 70, 90, 95,
+          85, 75,
         ],
       },
     ],
@@ -35,7 +35,7 @@ export default function ColumnChart() {
           show: false,
         },
         zoom: {
-          enabled: false,
+          enabled: true,
         },
       },
       labels: {
@@ -89,18 +89,18 @@ export default function ColumnChart() {
           },
         },
         categories: [
-          "Jan",
-          "Feb",
-          "Mar",
-          "Apr",
-          "May",
-          "Jun",
-          "Jul",
-          "Aug",
-          "Sep",
-          "Oct",
-          "Nov",
-          "Dec",
+          "Project1",
+          "Project2",
+          "Project3",
+          "Project4",
+          "Project5",
+          "Project6",
+          "Project7",
+          "Project8",
+          "Project9",
+          "Project10",
+          "Project11",
+          "Project12",
         ],
       },
       legend: {
@@ -118,12 +118,12 @@ export default function ColumnChart() {
             fontSize: "14px",
           },
           formatter: (value) => {
-            return value / 1000 + "K";
+            return value;
           },
         },
 
         min: 0,
-        max: 40000,
+        max: 100,
         tickAmount: 4,
       },
     },
@@ -135,8 +135,7 @@ export default function ColumnChart() {
         <Col className="hp-mb-16" span={24}>
           <Row justify="space-between">
             <Row align="bottom" className="hp-pb-16">
-              <h4 className="hp-mr-8">Column Chart</h4>
-              <p className="hp-badge-text">Revenue</p>
+              <h4 className="hp-mr-8">Project Progress</h4>
             </Row>
             
             <Col>

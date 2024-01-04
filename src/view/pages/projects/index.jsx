@@ -13,6 +13,8 @@ import {
   TimePicker,
   Modal,
   message,
+  Checkbox,
+  
   Upload,
 } from "antd";
 import { RiCloseFill, RiCalendarLine } from "react-icons/ri";
@@ -60,7 +62,7 @@ const columns = [
   },
   {
     title: "No of Users",
-    dataIndex: "numberOfUsers",
+    dataIndex: "authorId",
     key: "numberOfUsers",
   },
 
@@ -76,15 +78,31 @@ const columns = [
 ];
 
 export default function Projects() {
+  const [selectedDepartments, setSelectedDepartments] = useState([]);
+
+  const departmentOptions = [
+    { label: 'Project Management', value: 'projectManagement' },
+    { label: 'Process', value: 'process' },
+    { label: 'Mechanical', value: 'mechanical' },
+    { label: 'Electrical', value: 'electrical' },
+    { label: 'Instrumentation', value: 'instrumentation' },
+    { label: 'Civil / Structure', value: 'civilStructure' },
+    { label: 'Finance', value: 'finance' },
+    { label: 'HR / Admin', value: 'hrAdmin' },
+    { label: 'Quality', value: 'quality' },
+  ];
+
   const [projectModalVisible, setProjectModalVisible] = useState(false);
   const [permissionModalVisible, setPermissionModalVisible] = useState(false);
   const [projName, setProjName] = useState("");
+  const [clientEmail, setClientEmail] = useState("");
+
   const [departmentId, setDepartmentId] = useState("");
   const [status, setStatus] = useState("");
   const [code, setCode] = useState("");
   const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
   const [data, setData] = useState([]);
-  const [departmentOptions, setDepartments] = useState([]);
+  // const [departmentOptions, setDepartments] = useState([]);
   const [projectOptions, setProjects] = useState([]);
 
   const [projectId, setProjectId] = useState("");
@@ -208,14 +226,27 @@ export default function Projects() {
           <Form.Item label="Project Code" name="code">
             <Input value={code} onChange={(e) => setCode(e.target.value)} />
           </Form.Item>
-
-          <Form.Item label="Department Name" name="departmentId">
-            <Select
-              options={departmentOptions}
-              value={departmentId}
-              onChange={(e) => setDepartmentId(e)}
+          <Form.Item label="Client Email" name="clientEmail">
+            <Input
+              value={clientEmail}
+              onChange={(e) => setClientEmail(e.target.value)}
             />
-          </Form.Item>
+             </Form.Item>
+          <Form.Item
+        label="Departments"
+        name="departmentIds"
+        rules={[{ required: true, message: 'Please select at least one department' }]}
+      >
+        <Checkbox.Group options={departmentOptions} value={selectedDepartments} onChange={setSelectedDepartments} />
+      </Form.Item>
+         
+          <Form.Item label="Start Date" name="startDate" rules={[{ required: true, message: 'Please select start date' }]}>
+        <DatePicker style={{ width: '100%' }} />
+      </Form.Item>
+
+      <Form.Item label="End Date" name="endDate" rules={[{ required: true, message: 'Please select end date' }]}>
+        <DatePicker style={{ width: '100%' }} />
+      </Form.Item>
 
           <Form.Item label="Status" name="status">
             <Select

@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <Col span={24} className="hp-py-32">
       <p className="hp-mb-8 hp-p1-body hp-text-color-black-60">
-        COPYRIGHT ©{new Date().getFullYear} jobconnect, All rights Reserved
+        COPYRIGHT ©{new Date().getFullYear} Novacon, All rights Reserved
       </p>
 
       <Row align="middle" justify="center" gutter="16">

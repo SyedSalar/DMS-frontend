@@ -14,7 +14,7 @@ export default function DonutChart() {
   );
 
   const [data] = useState({
-    series: [1244, 2155, 1541],
+    series: [25, 13, 12],
     options: {
       chart: {
         fontFamily: "Manrope, sans-serif",
@@ -28,7 +28,7 @@ export default function DonutChart() {
       },
       colors: ["#0010F7", "#55B1F3", "#1BE7FF"],
 
-      labels: ["Marketing", "Payments", "Bills"],
+      labels: ["Open", "Closed", " Hold"],
 
       dataLabels: {
         enabled: false,
@@ -36,7 +36,7 @@ export default function DonutChart() {
       plotOptions: {
         pie: {
           donut: {
-            size: "85%",
+            size: "70%",
             labels: {
               show: true,
               name: {
@@ -45,7 +45,7 @@ export default function DonutChart() {
               value: {
                 fontSize: "16px",
                 formatter(val) {
-                  return `$ ${val}`;
+                  return `${val}`;
                 },
               },
               total: {
@@ -56,7 +56,7 @@ export default function DonutChart() {
                 //   return `$ `;
                 // },
                 formatter: function (w) {
-                  return `$ ${w.globals.seriesTotals.reduce((a, b) => {
+                  return `${w.globals.seriesTotals.reduce((a, b) => {
                     return a + b;
                   }, 0)}`;
                 },
@@ -88,8 +88,7 @@ export default function DonutChart() {
         <Col span={24}>
           <Row justify="space-between" align="top">
             <Col>
-              <h4 className="hp-mr-8">Donut Chart</h4>
-              <p className="hp-badge-text">Expenses</p>
+              <h4 className="hp-mr-8">Overall Projects</h4>
             </Col>
             
             <Col>

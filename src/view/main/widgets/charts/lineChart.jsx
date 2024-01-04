@@ -12,14 +12,14 @@ export default function LineChart() {
   const [data] = useState({
     series: [
       {
-        name: "Ads",
+        name: "In House",
         data: [
           28877, 29334, 33233, 36439, 32675, 32333, 33457, 38345, 36783, 39457,
           22459, 39840,
         ],
       },
       {
-        name: "Organic",
+        name: "Client",
         data: [
           12010, 11313, 14623, 18935, 17345, 13465, 17813, 19125, 16256, 20356,
           12233, 14570,
@@ -125,8 +125,7 @@ export default function LineChart() {
         <Col className="hp-mb-16" span={24}>
           <Row justify="space-between">
             <Row align="bottom" className="hp-pb-16">
-              <h4 className="hp-mr-8">Line Chart</h4>
-              <p className="hp-badge-text">Website Visit</p>
+              <h4 className="hp-mr-8">Number Of Comments</h4>
             </Row>
 
             <Col>

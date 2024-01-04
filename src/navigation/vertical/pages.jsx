@@ -273,6 +273,12 @@ const pages = [
     navLink: "/pages/users",
   },
   {
+    id: "clients",
+    title: <IntlMessages id="sidebar-pages-clients" />,
+    icon: <Profile size={18} />,
+    navLink: "/pages/clients",
+  },
+  {
     id: "departments",
     title: <IntlMessages id="sidebar-pages-departments" />,
     icon: <Profile size={18} />,
