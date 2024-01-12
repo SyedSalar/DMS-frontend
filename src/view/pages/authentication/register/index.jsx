@@ -41,6 +41,8 @@ export default function SignUp() {
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [name, setCompanyName] = useState("");
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -59,6 +61,7 @@ export default function SignUp() {
           lastName,
           email,
           password,
+          name
         }
       );
 
@@ -67,7 +70,8 @@ export default function SignUp() {
 
       if (response?.data) {
         message.success(response?.data?.message);
-        history.push("/pages/analytics");
+        localStorage.setItem("user", JSON.stringify(response?.data));
+        history.push("/pages/config_dept");
       }
       // message.success("Registered");
     } catch (error) {
@@ -152,7 +156,17 @@ export default function SignUp() {
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </Form.Item>
-
+              <Form.Item
+                label={<FormattedMessage id="company-name" />}
+                name="name"
+                rules={[{ required: true }, { type: "string", min: 3 }]}
+              >
+                <Input
+                  id="name"
+                  value={name}
+                  onChange={(e) => setCompanyName(e.target.value)}
+                />
+              </Form.Item>
               <Form.Item
                 label="Password :"
                 name="password"

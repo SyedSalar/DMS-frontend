@@ -70,6 +70,31 @@ const PagesRoutes = [
     layout: "VerticalLayout",
     isProtected: true,
   },
+
+  {
+    path: "/pages/config_dept",
+    component: lazy(() => import("../../view/pages/config_dept")),
+    layout: "VerticalLayout",
+    isProtected: true,
+  },
+  {
+    path: "/pages/config_users",
+    component: lazy(() => import("../../view/pages/config_users")),
+    layout: "VerticalLayout",
+    isProtected: true,
+  },
+  {
+    path: "/pages/config_document_number",
+    component: lazy(() => import("../../view/pages/config_document_number")),
+    layout: "VerticalLayout",
+    isProtected: true,
+  },
+  {
+    path: "/pages/initialMDR",
+    component: lazy(() => import("../../view/pages/initialMDR")),
+    layout: "VerticalLayout",
+    isProtected: true,
+  },
   // PAGES
   {
     path: "/pages/authentication/login",

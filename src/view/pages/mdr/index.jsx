@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
-
+import { useHistory } from 'react-router-dom'; 
 import {
   Row,
   Col,
@@ -57,7 +57,20 @@ export default function MDR() {
   const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
   const [data, setData] = useState([]);
   const [selectedDepartments, setSelectedDepartments] = useState([]);
+  const [mdrTemplateVisible, setMdrTemplateVisible] = useState(false);
 
+  const showMdrTemplate = () => {
+    setMdrTemplateVisible(true);
+  };
+
+  const hideMdrTemplate = () => {
+    setMdrTemplateVisible(false);
+  };
+
+  const history = useHistory();
+  const navigateToMdrTemplate = () => {
+    history.push('/pages/initialMDR'); // Replace '/path-to-mdr-template' with the actual route path to the MDR Template component
+};
   const departmentOptions = [
     { label: 'Project Management', value: 'projectManagement' },
     { label: 'Process', value: 'process' },
@@ -320,6 +333,8 @@ export default function MDR() {
         >
           Add Master Document Register
         </Button>
+        <Button onClick={navigateToMdrTemplate}>Select from MDR template</Button>
+      {mdrTemplateVisible && <MdrTemplate />}
       </div>
       <Table
         columns={[
