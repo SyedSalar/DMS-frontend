@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { useSelector } from "react-redux";
 
-import { Row, Col } from "antd";
+import { Row, Col,Image } from "antd";
 import { WalletMinus, Login, Add, Logout } from "iconsax-react";
 import axios from "axios";
 import FeatureCard from "../../main/dashboard/analytics/featureCard";
@@ -12,6 +12,8 @@ import AreaChart from "../../main/widgets/charts/areaChart";
 import ScatterChart from "../../main/widgets/charts/scatterChart";
 import ProtectedAppPage from "../Protected";
 import DonutChart from "../../main/widgets/charts/donutChart";
+import scurve from "../../.././assets/images/components/s_curve.png";
+
 export default function Analytics() {
   // Redux
   const customise = useSelector((state) => state.customise);
@@ -62,9 +64,12 @@ export default function Analytics() {
               <h1 className="hp-mb-0">Dashboard</h1>
             </Col>
 
-            <Col span={24}>
-              <AreaChart />
-            </Col>
+            <Image
+              src="https://media.licdn.com/dms/image/C4D12AQG6Sl5GOjFXfg/article-inline_image-shrink_1500_2232/0/1520214121931?e=1710374400&v=beta&t=kEFnJOK6FvhUY5hfDDyhS_Blbq20EOh6r3OrAvOXB9g"
+              alt="S Curve"
+              width={600} // Adjust the width as needed
+              height={300} // Adjust the height as needed
+            />
             <Col span={24}>
              <DonutChart/>
             </Col>
@@ -146,7 +151,12 @@ export default function Analytics() {
               </Row>
             </Col>
             <Col span={24}>
-              <ListCard title="System Logs" list={data?.logs} />
+            {user?.user?.roleId == 1 ? (
+  <ListCard title="System Logs" list={data?.logs} />
+) : (
+  <div />
+)}
+
             </Col>
           </Row>
         </Col>

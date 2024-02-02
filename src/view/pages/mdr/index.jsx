@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { useHistory } from 'react-router-dom'; 
+
 import {
   Row,
   Col,
@@ -57,7 +58,12 @@ export default function MDR() {
   const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
   const [data, setData] = useState([]);
   const [selectedDepartments, setSelectedDepartments] = useState([]);
+  const [selectedReviewer, setSelectedReviewer] = useState([]);
+  const [selectedApprover, setSelectedApprover] = useState([]);
+
   const [mdrTemplateVisible, setMdrTemplateVisible] = useState(false);
+  const [departmentOptions,setDepartmentOptions] = useState([])
+  const [userOptions, setUserData] = useState([]);
 
   const showMdrTemplate = () => {
     setMdrTemplateVisible(true);
@@ -69,19 +75,13 @@ export default function MDR() {
 
   const history = useHistory();
   const navigateToMdrTemplate = () => {
-    history.push('/pages/initialMDR'); // Replace '/path-to-mdr-template' with the actual route path to the MDR Template component
-};
-  const departmentOptions = [
-    { label: 'Project Management', value: 'projectManagement' },
-    { label: 'Process', value: 'process' },
-    { label: 'Mechanical', value: 'mechanical' },
-    { label: 'Electrical', value: 'electrical' },
-    { label: 'Instrumentation', value: 'instrumentation' },
-    { label: 'Civil / Structure', value: 'civilStructure' },
-    { label: 'Finance', value: 'finance' },
-    { label: 'HR / Admin', value: 'hrAdmin' },
-    { label: 'Quality', value: 'quality' },
-  ];
+    const project = projectOptions.find((item) => item?.value == projectId);
+    console.log('departmentOptions',departmentOptions);
+    const serializedDepartmentOptions = JSON.stringify(departmentOptions);
+const serializedProjectOptions = JSON.stringify(projectOptions);
+    history.push(`/pages/initialMDR?projectCode=${project.code}&mdrCode=${mdrCode}&departmentOptions=${serializedDepartmentOptions}&projectOptions=${serializedProjectOptions}&projectId=${projectId}&departmentId=${selectedDepartments}&title=${title}`);};
+ 
+  
   const documentModalShow = () => {
     setDocumentModalVisible(true);
   };
@@ -93,6 +93,9 @@ export default function MDR() {
     setDocumentModalVisible(false);
   };
 
+
+
+  
   const addDocument = async () => {
     try {
       const project = projectOptions.find((item) => item?.value == projectId);
@@ -160,6 +163,7 @@ export default function MDR() {
           },
         }
       );
+      console.log('mdr data',response.data);
       setData(response.data); // Assuming the response.data is an array of projects
     } catch (error) {
       console.error("Error fetching documents:", error?.message);
@@ -180,7 +184,7 @@ export default function MDR() {
       for (const item of response?.data) {
         options.push({ value: item?.id, label: item?.title });
       }
-      setDepartments(options); // Assuming the response.data is an array of projects
+      setDepartmentOptions(options); // Assuming the response.data is an array of projects
     } catch (error) {
       console.error("Error fetching departments:", error?.message);
     }
@@ -196,11 +200,58 @@ export default function MDR() {
           },
         }
       );
-      const options = [];
-      for (const item of response?.data) {
-        options.push({ value: item?.id, label: item?.title, code: item?.code });
-      }
+  
+      // Use Set to store unique titles
+      const uniqueTitlesSet = new Set();
+  
+      const options = response?.data.reduce((acc, item) => {
+        // Check if the title is not in the Set
+        if (!uniqueTitlesSet.has(item.title)) {
+          // Add title to the Set
+          uniqueTitlesSet.add(item.title);
+  
+          // Push the option to the result array
+          acc.push({ value: item.id, label: item.title, code: item.code });
+        }
+  
+        return acc;
+      }, []);
+  
+      console.log(response.data);
       setProjects(options); // Assuming the response.data is an array of projects
+      console.log(projectOptions);
+    } catch (error) {
+      console.error("Error fetching departments:", error?.message);
+    }
+  };
+  const fetchUsers = async () => {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8083/api/users?companyId=${user?.user?.companyId}&roleId=2`,
+        {
+          headers: {
+            Authorization: user?.accessToken,
+            // Add other headers if needed
+          },
+        }
+      );
+      console.log(response?.data, "UUUAUA");
+      const options = [];
+     
+      for (const item of response?.data) {
+        var role='Engineer'
+        if(item.roleId==1){
+           role ='CEO'
+        } if(item.roleId==2){
+          role ='HEAD'
+       }
+        options.push({
+          value: item?.id,
+          label: `${item?.firstName} ${item?.lastName} ${role}`,
+        });
+      }
+
+      setUserData(options); // Assuming the response.data is an array of DocumentPermissions
     } catch (error) {
       console.error("Error fetching departments:", error?.message);
     }
@@ -210,6 +261,7 @@ export default function MDR() {
     // Fetch data when the component mounts
     fetchDepartments();
     fetchProjects();
+    fetchUsers();
     fetchData();
   }, []);
   return (
@@ -277,13 +329,36 @@ export default function MDR() {
                   },
                 ]}
               >
-                <Select
+ <Select
                   options={projectOptions}
                   value={projectId}
                   onChange={(value) => setProjectId(value)}
-                />
-              </Form.Item>
+                />              </Form.Item>
               <Form.Item
+                label="Add Reviewers"
+                name="reviewers"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select Reviewers Name",
+                  },
+                ]}
+              >
+                              <Checkbox.Group options={userOptions} value={selectedReviewer} onChange={setSelectedReviewer} />
+
+              </Form.Item> <Form.Item
+                label="Add Approvers"
+                name="approvers"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select Approvers Name",
+                  },
+                ]}
+              >
+               <Checkbox.Group options={userOptions} value={selectedApprover} onChange={setSelectedApprover} />
+              </Form.Item>
+              {/* <Form.Item
                 label="No of Documents"
                 name="noOfDocuments"
                 rules={[
@@ -298,9 +373,20 @@ export default function MDR() {
                   value={noOfDocuments}
                   onChange={(e) => setNoOfDocuments(e.target.value)}
                 />
-              </Form.Item>
-              <Row>
+              </Form.Item> */}
+
+              <Row>           
+              <Col md={12} span={24} className="hp-pr-sm-0 hp-pr-12">
+                  <Button block onClick={navigateToMdrTemplate} type="primary"htmlType="submit">MDR template</Button>
+                </Col>
                 <Col md={12} span={24} className="hp-pr-sm-0 hp-pr-12">
+                  <Button block onClick={navigateToMdrTemplate} type="primary"htmlType="submit">Create Custom</Button>
+                </Col>
+                
+              </Row>
+
+              <Row>
+                {/* <Col md={12} span={24} className="hp-pr-sm-0 mt-2 hp-pr-12 ">
                   <Button
                     block
                     type="primary"
@@ -309,9 +395,9 @@ export default function MDR() {
                   >
                     Submit
                   </Button>
-                </Col>
+                </Col> */}
 
-                <Col
+                {/* <Col
                   md={12}
                   span={24}
                   className="hp-mt-sm-12 hp-pl-sm-0 hp-pl-12"
@@ -319,7 +405,7 @@ export default function MDR() {
                   <Button block onClick={documentModalCancel}>
                     Cancel
                   </Button>
-                </Col>
+                </Col> */}
               </Row>
             </Form>
           </Col>
@@ -333,7 +419,6 @@ export default function MDR() {
         >
           Add Master Document Register
         </Button>
-        <Button onClick={navigateToMdrTemplate}>Select from MDR template</Button>
       {mdrTemplateVisible && <MdrTemplate />}
       </div>
       <Table

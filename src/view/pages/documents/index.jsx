@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
+import { saveData, loadData, getAllKeys } from '../../storage';
+import { useHistory } from 'react-router-dom'; 
 
 import {
   Row,
@@ -46,6 +48,8 @@ const uploadProps = {
 };
 
 export default function Document() {
+  const history = useHistory();
+
   const columns = [
     {
       title: "Document Id",
@@ -69,8 +73,8 @@ export default function Document() {
     },
     {
       title: "MDR",
-      dataIndex: "masterDocumentId",
-      key: "masterDocumentId",
+      dataIndex: "title",
+      key: "title",
     },
     {
       title: ".exe",
@@ -88,13 +92,22 @@ export default function Document() {
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          <a>Delete</a>
-          <a onClick={() => statusModalShow(record)}>Add Status</a>
+          {user.user.roleId != 1 ? (
+            <a>
+              Upload <input type="file" onChange={handleFileChange} />
+            </a>
+          ) : (
+            <>
+              <a onClick={() => history.push(`/pages/mypdf?documentId=${record.id}`)}>Open</a>
+              <a onClick={() => statusModalShow(record)}>Add Status</a>
+            </>
+          )}
         </Space>
       ),
-    },
+    }
   ];
-  
+  const [selectedDocument, setSelectedDocument] = useState(null);
+
   const [documentModalVisible, setDocumentModalVisible] = useState(false);
   const [docTitle, setDocTitle] = useState("");
   const [projectId, setProjectId] = useState("");
@@ -124,7 +137,9 @@ export default function Document() {
   };
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
+    console.log('my file',file);
   };
+
 
   const addDocument = async () => {
     try {
@@ -181,11 +196,23 @@ export default function Document() {
           },
         }
       );
-      setData(response.data); // Assuming the response.data is an array of projects
+  
+      const savedData = getAllKeys('doc');
+      console.log('saved data', savedData);
+  
+      var allJsonData = savedData.map((key) => loadData(key));
+  console.log(allJsonData);
+      console.log(response.data);
+  
+      // Check if response.data is an array before including it in the setData call
+      const newData = Array.isArray(response.data) ? response.data : [];
+  
+      setData([...allJsonData, ...newData]);
     } catch (error) {
       console.error("Error fetching documents:", error?.message);
     }
   };
+  
   const fetchDepartments = async () => {
     try {
       const response = await axios.get(
@@ -254,7 +281,8 @@ export default function Document() {
   };
   const [statusModalVisible, setStatusModalVisible] = useState(false);
 const [selectedStatus, setSelectedStatus] = useState("");
-const statusModalShow = () => {
+const statusModalShow = (record) => {
+  setSelectedDocument(record);
   setStatusModalVisible(true);
 };
 
@@ -264,26 +292,32 @@ const statusModalCancel = () => {
 };
 const [updatedData, setUpdatedData] = useState([]);
 
-const handleStatusChange = (selectedStatus, record) => {
-  // Perform your logic to update the status here
-  // You can use the selectedStatus along with the record data
-  // to update the status in the data array or make an API call
+const handleStatusChange = () => {
+  // Check if the selected document is available
+  if (selectedDocument) {
+    // Perform your logic to update the status here
+    // You can use the selectedStatus along with the record data
+    // to update the status in the data array or make an API call
 
-  // Check if the record is defined before accessing its properties
-  if (record && record.id) {
-    const updatedRecord = { ...record, status: selectedStatus };
+    const updatedRecord = { ...selectedDocument, status: selectedStatus };
 
     // Update the data array with the modified record
     const updatedDataArray = data.map((item) =>
-      item.id === record.id ? updatedRecord : item
+      item.id === selectedDocument.id ? updatedRecord : item
     );
+    console.log(selectedDocument)
+    saveData(selectedDocument.id, { 'status': selectedStatus });
+
+    // Load data from the specific key
+    const loadedData = loadData(selectedDocument.id);
+    console.log('status',loadedData);
 
     // Trigger a re-render with the updated data
     setUpdatedData(updatedDataArray);
-  }
 
-  // Close the status modal
-  statusModalCancel();
+    // Close the status modal
+    statusModalCancel();
+  }
 };
 
 
@@ -294,7 +328,7 @@ useEffect(() => {
   fetchProjects();
   fetchMDR();
   fetchData();
-}, [updatedData]); // Add updatedData as a dependency
+}, []); // Add updatedData as a dependency
 
 useEffect(() => {
   // Update the data state with the updatedData

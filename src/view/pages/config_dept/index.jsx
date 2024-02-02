@@ -18,7 +18,7 @@ const departmentsData = [
 const DepartmentSelection = () => {
   const [mdrTemplateVisible, setMdrTemplateVisible] = useState(false);
   const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
-
+var selectedSuffix=[];
   const showMdrTemplate = () => {
     setMdrTemplateVisible(true);
   };
@@ -37,6 +37,33 @@ const DepartmentSelection = () => {
 const addDepartments = async () => {
     try {
       console.log(user);
+      if (selectedDepartments.includes('Project Management')) {
+        selectedSuffix.push('PM')
+      }
+      if (selectedDepartments.includes('Process')) {
+        selectedSuffix.push('PRO')
+      }
+      if (selectedDepartments.includes('Mechanical')) {
+        selectedSuffix.push('ME')
+      }
+      if (selectedDepartments.includes('Electrical')) {
+        selectedSuffix.push('ELE')
+      }
+      if (selectedDepartments.includes('Instrumentation')) {
+        selectedSuffix.push('INS')
+      }
+      if (selectedDepartments.includes('Civil / Structure')) {
+        selectedSuffix.push('CIV')
+      }
+      if (selectedDepartments.includes('Finance')) {
+        selectedSuffix.push('FIN')
+      }
+      if (selectedDepartments.includes('HR / Admin')) {
+        selectedSuffix.push('HR')
+      }
+      if (selectedDepartments.includes('Quality')) {
+        selectedSuffix.push('QLT')
+      }
       const response = await axios.post(
         "http://127.0.0.1:8083/api/departments/",
         {
@@ -44,6 +71,7 @@ const addDepartments = async () => {
           companyId: user?.user?.companyId,
           authorId: user?.user?.id,
           authorName: `${user?.user?.firstName} ${user?.user?.lastName}`,
+          suffix:selectedSuffix
         },
         {
           headers: {

@@ -12,7 +12,7 @@ import {
   Button,
   Modal,
   message,
-  Select
+  Select,Divider
 } from "antd";
 import { RiMore2Line, RiMenuFill, RiCloseFill } from "react-icons/ri";
 
@@ -25,6 +25,8 @@ import CustomizedTables from "../../common/BaseTable";
 
 
 export default function Projects() {
+  const [user, setUser] = useState(JSON.parse(localStorage?.getItem("user")));
+
   const columns = [
     {
       title: "Name",
@@ -236,7 +238,14 @@ const handleStatusChange = (selectedStatus) => {
     </Col>
   </Row>
 </Modal>
-  <Table columns={columns} dataSource={data} />
+{user?.user?.roleId === 1 ? (
+        <Table columns={columns} dataSource={data} />
+      ) : (
+        <div>
+          <Divider />
+          <p>You do not have permissions to view.</p>
+        </div>
+      )}
   
   </>;
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
+import SplashScreen from "./splashScreen";
 import { Row, Col, Form, Input, Button, Checkbox, message, Spin } from "antd";
 import axios from "axios";
 import LeftContent from "../leftContent";
@@ -19,12 +19,22 @@ export default function Login() {
 
   const loading = useSelector((state) => state.auth.loading);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const [showSplashScreen, setShowSplashScreen] = useState(true);
 
   useEffect(() => {
     if (isLoggedIn) {
       history.push("/");
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn,history]);
+  useEffect(() => {
+    // Hide the splash screen after 3 seconds
+    const splashScreenTimeout = setTimeout(() => {
+      setShowSplashScreen(false);
+    }, 3000);
+
+    // Cleanup the timeout to avoid memory leaks
+    return () => clearTimeout(splashScreenTimeout);
+  }, []);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -67,7 +77,13 @@ export default function Login() {
     }
   };
   return (
+    <>
+    {showSplashScreen ? (
+      <SplashScreen />
+    ) : (
+      <>
     <Row gutter={[32, 0]} className="hp-authentication-page">
+      
       <LeftContent />
 
       <Col lg={12} span={24} className="hp-py-sm-0 hp-py-md-64">
@@ -184,6 +200,8 @@ export default function Login() {
           </Col>
         </Row>
       </Col>
-    </Row>
+      
+    </Row></>)}
+    </>
   );
 }

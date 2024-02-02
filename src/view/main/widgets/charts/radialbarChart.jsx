@@ -90,7 +90,7 @@ export default function RadialbarChart() {
         <Col span={24}>
           <Row justify="space-between" align="top">
             <Col>
-            <h4 className="hp-mr-8">Projects</h4>
+            <h4 className="hp-mr-8">Action Items</h4>
             </Col>
 
             <Col>

@@ -41,6 +41,11 @@ const columns = [
     dataIndex: "roleTitle",
     key: "roleTitle",
   },
+  {
+    title: "Department",
+    dataIndex: "departmentName",
+    key: "departmentName",
+  },
 
   {
     title: "Action",
@@ -115,7 +120,7 @@ export default function Users() {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8083/api/users?companyId=${user?.user?.companyId}&roleId=2`,
+        `http://127.0.0.1:8083/api/users?companyId=${user?.user?.companyId}`,
         {
           headers: {
             Authorization: user?.accessToken,

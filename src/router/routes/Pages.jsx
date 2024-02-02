@@ -1,4 +1,8 @@
 import { lazy } from "react";
+import React from 'react';
+import { useState,useEffect } from 'react';
+
+const user=JSON.parse(localStorage?.getItem("user"));
 
 const PagesRoutes = [
   //Workspace
@@ -6,6 +10,12 @@ const PagesRoutes = [
   {
     path: "/pages/workspace",
     component: lazy(() => import("../../view/main/widgets/charts")),
+    layout: "VerticalLayout",
+    isProtected: false,
+  },
+  {
+    path: "/pages/mypdf",
+    component: lazy(() => import("../../view/pages/mypdf")),
     layout: "VerticalLayout",
     isProtected: false,
   },

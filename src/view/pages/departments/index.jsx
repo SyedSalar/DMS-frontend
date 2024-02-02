@@ -48,7 +48,8 @@ const columns = [
       
       <Space size="middle">
         <a>Delete</a>
-        <a onClick={() => addUser(record)}>Add User</a>
+        <a onClick={() => addUser(record)}           disabled={user?.user?.roleId != 1}
+>Add User</a>
       </Space>
       
     ),
@@ -70,6 +71,29 @@ const fetchUserData = async () => {
       options.push({ value: item?.id, label: item?.firstName });
     }
     setUserOptions(options); // Assuming the response.data is an array of projects
+  } catch (error) {
+    console.error("Error fetching documents:", error?.message);
+  }
+};
+const [department,setDepartment] = useState([])
+
+const fetchDept = async () => {
+  try {
+    const response = await axios.get(
+      `http://127.0.0.1:8083/api/departments?companyId=${user?.user?.companyId}`,
+      {
+        headers: {
+          Authorization: user?.accessToken,
+          // Add other headers if needed
+        },
+      }
+    );
+    const options = [];
+    for (const item of response?.data) {
+      options.push(item);
+    }
+    setDepartment(options); 
+    console.log(department);
   } catch (error) {
     console.error("Error fetching documents:", error?.message);
   }
@@ -234,6 +258,8 @@ setDepartmentId(record['id']);
                     type="primary"
                     htmlType="submit"
                     onClick={() => addDepartments()}
+                    disabled={user?.user?.roleId != 1}
+
                   >
                     Submit
                   </Button>
@@ -312,7 +338,8 @@ setDepartmentId(record['id']);
         </Row>
       </Modal>
       <div style={{ textAlign: "right", marginBottom: "16px"}}>
-        <Button type="primary" onClick={departmentModalShow}>
+        <Button type="primary" onClick={departmentModalShow}           disabled={user?.user?.roleId != 1}
+>
           Add Department
         </Button>
       

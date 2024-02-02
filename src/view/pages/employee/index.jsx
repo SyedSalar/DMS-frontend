@@ -11,7 +11,7 @@ const { Option } = Select;
 const EmployeeForm = ({ onSubmit }) => {
   const [form] = Form.useForm();
   const [email, setEmail] = useState("");
-  const [role, setRole] = useState("");
+  const [roleId, setRole] = useState("");
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -40,6 +40,7 @@ const EmployeeForm = ({ onSubmit }) => {
           email,
           firstName,
           lastName,
+          roleId,
           companyId:user?.user?.companyId
         },
         {
@@ -64,7 +65,26 @@ const EmployeeForm = ({ onSubmit }) => {
   const navigateToMdrTemplate = () => {
     history.push('/pages/config_document_number'); // Replace '/path-to-mdr-template' with the actual route path to the MDR Template component
 };
-
+const handleRoleChange = (value) => {
+  // Set the role based on the selected designation
+  switch (value) {
+    case "Head":
+      setRole("2");
+      break;
+    case "Senior":
+      setRole("3");
+      break;
+    case "Junior":
+      setRole("4");
+      break;
+    case "Designer":
+      setRole("5");
+      break;
+    default:
+      setRole("");
+      break;
+  }
+};
   return (
     <Form form={form} onFinish={handleSubmit} layout="vertical">
         <div style={{ textAlign: 'center', marginTop: 20 }}>
@@ -85,7 +105,7 @@ const EmployeeForm = ({ onSubmit }) => {
               onChange={(e) => setEmail(e.target.value)} />
       </Form.Item>
       <Form.Item name="designation" label="Designation" rules={[{ required: true }]}>
-        <Select>
+        <Select onChange={handleRoleChange}>
           <Option value="Head">Head of Dept</Option>
           <Option value="Senior">Senior Engineer</Option>
           <Option value="Junior">Junior Engineer</Option>
